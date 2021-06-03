@@ -186,8 +186,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-// Central Branch
-
 public class MainActivity extends PermissionsActivity
     implements SmbConnectionListener,
         BookmarkCallback,
