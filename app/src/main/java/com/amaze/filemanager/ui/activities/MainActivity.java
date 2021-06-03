@@ -186,6 +186,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+// This is Fork project
+
 public class MainActivity extends PermissionsActivity
     implements SmbConnectionListener,
         BookmarkCallback,
