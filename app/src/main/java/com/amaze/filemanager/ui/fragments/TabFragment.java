@@ -45,6 +45,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -420,6 +421,7 @@ public class TabFragment extends Fragment implements ViewPager.OnPageChangeListe
   }
 
   private void updateBottomBar(MainFragment mainFragment) {
+    Log.d("ASIM","KLMM TabFragment updateBottomBar mainFragment.folder_count:"+mainFragment.folder_count+" file_count"+mainFragment.file_count);
     mainActivity
         .getAppbar()
         .getBottomBar()

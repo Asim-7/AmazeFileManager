@@ -44,6 +44,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -205,15 +206,18 @@ public class BottomBar implements View.OnTouchListener {
   }
 
   public void setPathText(String text) {
+      Log.d("ASIM","BottomBar setPathText text:"+text);
     pathText.setText(text);
   }
 
   public void setFullPathText(String text) {
-    fullPathText.setText(text);
+      Log.d("ASIM","BottomBar setFullPathText text:"+text);
+      fullPathText.setText(text);
   }
 
   public String getFullPathText() {
-    return fullPathText.getText().toString();
+      Log.d("ASIM","BottomBar getFullPathText fullPathText.getText:"+fullPathText.getText());
+      return fullPathText.getText().toString();
   }
 
   public boolean areButtonsShowing() {
@@ -368,6 +372,8 @@ public class BottomBar implements View.OnTouchListener {
       default:
         newPath = news;
     }
+
+      Log.d("ASIM","KLMM BottomBar updatePath folderCount:"+folderCount+" fileCount"+fileCount);
 
     if (!results) {
       pathText.setText(mainActivity.getString(R.string.folderfilecount, folderCount, fileCount));

@@ -34,6 +34,7 @@ import com.amaze.filemanager.ui.fragments.DbViewerFragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -68,6 +69,7 @@ public class DatabaseViewerActivity extends ThemedActivity {
     getSupportActionBar().setDisplayHomeAsUpEnabled(!useNewStack);
 
     path = getIntent().getStringExtra("path");
+    Log.d("Asim","Database path:"+path);
     pathFile = new File(path);
     listView = findViewById(R.id.listView);
 
@@ -91,13 +93,16 @@ public class DatabaseViewerActivity extends ThemedActivity {
     for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
       for (int i = 0; i < c.getColumnCount(); i++) {
         result.add(c.getString(i));
+        String asd = c.getString(i);
+          Log.d("Asim","Database getDbTableNames name:"+asd);
       }
     }
     return result;
   }
 
   private void load(final File file) {
-    new Thread(
+      Log.d("Asim","Database load file:"+file);
+      new Thread(
             () -> {
               File file1 = getExternalCacheDir();
 
@@ -123,7 +128,8 @@ public class DatabaseViewerActivity extends ThemedActivity {
                     sqLiteDatabase.rawQuery(
                         "SELECT name FROM sqlite_master WHERE type='table'", null);
                 arrayList = getDbTableNames(c);
-                arrayAdapter =
+                  Log.d("Asim","Database load arrayList:"+arrayList);
+                  arrayAdapter =
                     new ArrayAdapter(
                         DatabaseViewerActivity.this,
                         android.R.layout.simple_list_item_1,

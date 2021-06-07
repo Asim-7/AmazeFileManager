@@ -183,6 +183,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
    * @param imageView the check {@link CircleGradientDrawable} that is to be animated
    */
   public void toggleChecked(int position, ImageView imageView) {
+    Log.d("Asim","MainFragment toggleChecked position:"+ position);
+
     if (itemsDigested.size() <= position || position < 0) {
       AppConfig.toast(context, R.string.operation_not_supported);
       return;
@@ -235,6 +237,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   public void invalidateActionMode() {
+    Log.d("Asim","MainFragment invalidateActionMode");
+
     if (mainFrag.mActionMode != null && mainFrag.selection) {
       // we have the actionmode visible, invalidate it's views
       mainFrag.mActionMode.invalidate();
@@ -245,6 +249,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   public void toggleChecked(boolean b, String path) {
+    Log.d("Asim","MainFragment toggleChecked b:"+b+" path:"+path);
+
     int i = path.equals("/") || !getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) ? 0 : 1;
 
     for (; i < itemsDigested.size(); i++) {
@@ -266,6 +272,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
    * @param b if to toggle true or false
    */
   public void toggleChecked(boolean b) {
+    Log.d("Asim","MainFragment toggleChecked b:"+b);
     for (int i = 0; i < itemsDigested.size(); i++) {
       ListItem item = itemsDigested.get(i);
       if (b && item.getChecked() != ListItem.CHECKED) {
@@ -287,15 +294,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         selected.add(itemsDigested.get(i).elem);
       }
     }
+    Log.d("Asim","MainFragment getCheckedItems selected:"+selected);
 
     return selected;
   }
 
   public ArrayList<ListItem> getItemsDigested() {
+    Log.d("Asim","MainFragment getItemsDigested itemsDigested:"+itemsDigested);
+
     return itemsDigested;
   }
 
   public boolean areAllChecked(String path) {
+    Log.d("Asim","MainFragment areAllChecked path:"+path);
     boolean allChecked = true;
     int i = (path.equals("/") || !getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON)) ? 0 : 1;
 
@@ -316,12 +327,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         checked.add(i);
       }
     }
+    Log.d("Asim","MainFragment getCheckedItemsIndex checked:"+checked);
 
     return checked;
   }
 
   @Override
   public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+    Log.d("Asim","MainFragment onViewDetachedFromWindow");
     if (holder instanceof ItemViewHolder) {
       ((ItemViewHolder) holder).rl.clearAnimation();
       ((ItemViewHolder) holder).txtTitle.setSelected(false);
@@ -334,6 +347,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override
   public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    Log.d("Asim","MainFragment onViewAttachedToWindow");
+
     super.onViewAttachedToWindow(holder);
     boolean enableMarqueeFilename =
         sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
@@ -345,6 +360,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override
   public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+    Log.d("Asim","MainFragment onFailedToRecycleView");
     ((ItemViewHolder) holder).rl.clearAnimation();
     ((ItemViewHolder) holder).txtTitle.setSelected(false);
     return super.onFailedToRecycleView(holder);
@@ -363,6 +379,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
    * adapter, after you are finished you must call createHeaders
    */
   public void addItem(LayoutElementParcelable e) {
+    Log.d("Asim","MainFragment addItem e:"+e);
+
     if (mainFrag.IS_LIST && itemsDigested.size() > 0) {
       itemsDigested.add(itemsDigested.size() - 1, new ListItem(e));
     } else if (mainFrag.IS_LIST) {
@@ -376,11 +394,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   public void setItems(RecyclerView recyclerView, ArrayList<LayoutElementParcelable> arrayList) {
+    Log.d("Asim","MainFragment setItems arrayList size:"+arrayList.size());
     setItems(recyclerView, arrayList, true);
   }
 
   private void setItems(
       RecyclerView recyclerView, ArrayList<LayoutElementParcelable> arrayList, boolean invalidate) {
+    Log.d("Asim","MainFragment setItems arrayList Size:"+arrayList.size());
+
     if (preloader != null) {
       recyclerView.removeOnScrollListener(preloader);
       preloader = null;
@@ -421,6 +442,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   public void createHeaders(boolean invalidate, List<IconDataParcelable> uris) {
+    Log.d("Asim","MainFragment createHeaders uris:"+uris);
     boolean[] headers = new boolean[] {false, false};
 
     for (int i = 0; i < itemsDigested.size(); i++) {

@@ -74,6 +74,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -481,16 +482,6 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
             R.drawable.ic_library_books_white_24dp,
             null);
       }
-      if (quickAccessPref[6]) {
-        addNewItem(
-            menu,
-            QUICKACCESSES_GROUP,
-            order++,
-            R.string.apks,
-            new MenuMetadata("4"),
-            R.drawable.ic_apk_library_white_24dp,
-            null);
-      }
     }
 
     addNewItem(
@@ -687,6 +678,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    Log.d("ASIM","Drawer onNavigationItemSelected MenuItem:"+item);
+
     actionViewStateManager.deselectCurrentActionView();
     actionViewStateManager.selectActionView(item);
 
@@ -697,6 +690,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     switch (meta.type) {
       case MenuMetadata.ITEM_ENTRY:
         if (dataUtils.containsBooks(new String[] {title, meta.path}) != -1) {
+          Log.d("ASIM","Drawer onNavigationItemSelected MenuMetadata.ITEM_ENTRY meta.path:"+meta.path);
           FileUtils.checkForPath(mainActivity, meta.path, mainActivity.isRootExplorer());
         }
 
@@ -741,6 +735,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
   }
 
   public void onNavigationItemActionClick(MenuItem item) {
+    Log.d("ASIM","Drawer onNavigationItemActionClick MenuItem:"+item);
     DrawerViewModel model = new ViewModelProvider(mainActivity).get(DrawerViewModel.class);
     String title = item.getTitle().toString();
     MenuMetadata meta = model.getDrawerMetadata(item);
@@ -844,6 +839,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     if (navView.getSelected() == null) {
       return -1;
     }
+    Log.d("ASIM","Drawer getDrawerSelectedItem navView.getSelected().getItemId():"+navView.getSelected().getItemId());
     return navView.getSelected().getItemId();
   }
 

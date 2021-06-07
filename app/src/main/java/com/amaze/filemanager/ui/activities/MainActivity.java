@@ -331,6 +331,7 @@ public class MainActivity extends PermissionsActivity
     }
 
     path = getIntent().getStringExtra("path");
+    Log.d("Asim","MainActivity path:"+path);
     openProcesses = getIntent().getBooleanExtra(KEY_INTENT_PROCESS_VIEWER, false);
     intent = getIntent();
 
@@ -560,12 +561,14 @@ public class MainActivity extends PermissionsActivity
   }
 
   private void saveExternalIntent(final ArrayList<Uri> uris) {
+    Log.d("Asim","MainActivity saveExternalIntent uris:"+uris);
     executeWithMainFragment(
         mainFragment -> {
           if (uris != null && uris.size() > 0) {
             if (SDK_INT >= LOLLIPOP) {
               File folder = new File(mainFragment.getCurrentPath());
               int result = mainActivityHelper.checkFolder(folder, MainActivity.this);
+              Log.d("Asim","MainActivity saveExternalIntent result:"+ result);
               if (result == WRITABLE_OR_ON_SDCARD) {
                 FileUtil.writeUriToStorage(
                     MainActivity.this, uris, getContentResolver(), mainFragment.getCurrentPath());
@@ -607,6 +610,7 @@ public class MainActivity extends PermissionsActivity
             data.append(AppConstants.NEW_LINE).append(extras.getString(Intent.EXTRA_TEXT));
           }
           String fileName = Long.toString(System.currentTimeMillis());
+          Log.d("Asim","MainActivity saveExternalIntentExtras data:"+ data + " fileName:" + fileName);
           AppConfig.getInstance()
               .runInBackground(
                   () ->
@@ -654,6 +658,7 @@ public class MainActivity extends PermissionsActivity
               getResources().getString(R.string.root_directory),
               R.drawable.ic_drawer_root_white));
     }
+    Log.d("Asim","MainActivity getStorageDirectories volumes:"+ volumes);
     return volumes;
   }
 
@@ -689,6 +694,7 @@ public class MainActivity extends PermissionsActivity
       }
       volumes.add(new StorageDirectoryParcelable(path.getPath(), name, icon));
     }
+    Log.d("Asim","MainActivity getStorageDirectoriesNew volumes:"+ volumes);
     return volumes;
   }
 
@@ -795,6 +801,7 @@ public class MainActivity extends PermissionsActivity
 
       volumes.add(new StorageDirectoryParcelable(file, name, icon));
     }
+    Log.d("Asim","MainActivity getStorageDirectoriesLegacy volumes:"+ volumes);
 
     return volumes;
   }
@@ -951,6 +958,7 @@ public class MainActivity extends PermissionsActivity
       try {
         executeWithMainFragment(
             mainFragment -> {
+              Log.d("ASIM","KLMM MainActivity onPrepareOptionsMenu mainFragment.folder_count:"+mainFragment.folder_count+" mainFragment.file_count"+mainFragment.file_count);
               if (mainFragment.IS_LIST) s.setTitle(R.string.gridview);
               else s.setTitle(R.string.listview);
               appbar
@@ -1341,6 +1349,7 @@ public class MainActivity extends PermissionsActivity
   }
 
   public void openCompressed(String path) {
+    Log.d("Asim","MainActivity openCompressed path:"+ path);
     appBarLayout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     fragmentTransaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_in_bottom);
@@ -1415,7 +1424,8 @@ public class MainActivity extends PermissionsActivity
         treeUri = intent.getData();
         // Persist URI - this is required for verification of writability.
         if (treeUri != null)
-          getPrefs()
+          Log.d("Asim","MainActivity onActivityResult treeUri:"+ treeUri);
+        getPrefs()
               .edit()
               .putString(PreferencesConstants.PREFERENCE_URI, treeUri.toString())
               .apply();
@@ -1728,6 +1738,7 @@ public class MainActivity extends PermissionsActivity
         }
       }
     }
+    Log.d("Asim","MainActivity onNewIntent path:"+ path);
   }
 
   private BroadcastReceiver receiver2 =
