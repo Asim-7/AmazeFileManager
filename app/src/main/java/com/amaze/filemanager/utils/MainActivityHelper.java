@@ -43,8 +43,8 @@ import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.explorer.EncryptedEntry;
 import com.amaze.filemanager.file_operations.filesystem.FolderState;
 import com.amaze.filemanager.file_operations.filesystem.OpenMode;
+import com.amaze.filemanager.filesystem.ExternalSdCardOperation;
 import com.amaze.filemanager.filesystem.FileProperties;
-import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HybridFile;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.Operations;
@@ -70,6 +70,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -167,7 +168,7 @@ public class MainActivityHelper {
           dialog.dismiss();
         },
         (text) -> {
-          boolean isValidFilename = FileUtil.isValidFilename(text);
+          boolean isValidFilename = FileProperties.isValidFilename(text);
 
           if (!isValidFilename) {
             return new WarnableTextInputValidator.ReturnState(
@@ -205,7 +206,7 @@ public class MainActivityHelper {
           dialog.dismiss();
         },
         (text) -> {
-          boolean isValidFilename = FileUtil.isValidFilename(text);
+          boolean isValidFilename = FileProperties.isValidFilename(text);
 
           // The redundant equalsIgnoreCase() is needed since ".txt" itself does not end with .txt
           // (i.e. recommended as ".txt.txt"
@@ -436,7 +437,7 @@ public class MainActivityHelper {
     } else {
       File folder = new File(path);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        if (FileUtil.isOnExtSdCard(folder, context)) {
+        if (ExternalSdCardOperation.isOnExtSdCard(folder, context)) {
           if (!folder.exists() || !folder.isDirectory()) {
             return DOESNT_EXIST;
           }
@@ -452,7 +453,7 @@ public class MainActivityHelper {
           return WRITABLE_OR_ON_SDCARD;
         } else return DOESNT_EXIST;
       } else if (Build.VERSION.SDK_INT == 19) {
-        if (FileUtil.isOnExtSdCard(folder, context)) {
+        if (ExternalSdCardOperation.isOnExtSdCard(folder, context)) {
           // Assume that Kitkat workaround works
           return WRITABLE_OR_ON_SDCARD;
         } else if (FileProperties.isWritable(new File(folder, "DummyFile"))) {
@@ -715,8 +716,15 @@ public class MainActivityHelper {
    */
   public void search(SharedPreferences sharedPrefs, String query) {
     TabFragment tabFragment = mainActivity.getTabFragment();
-    if (tabFragment == null) return;
+    if (tabFragment == null) {
+      Log.w(getClass().getSimpleName(), "Failed to search: tab fragment not available");
+      return;
+    }
     final MainFragment ma = (MainFragment) tabFragment.getCurrentTabFragment();
+    if (ma == null || ma.getMainFragmentViewModel() == null) {
+      Log.w(getClass().getSimpleName(), "Failed to search: main fragment not available");
+      return;
+    }
     final String fpath = ma.getCurrentPath();
 
     /*SearchTask task = new SearchTask(ma.searchHelper, ma, query);
@@ -739,7 +747,7 @@ public class MainActivityHelper {
         new SearchWorkerFragment(),
         fpath,
         query,
-        ma.openMode,
+        ma.getMainFragmentViewModel().getOpenMode(),
         mainActivity.isRootExplorer(),
         sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX, false),
         sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX_MATCHES, false));
