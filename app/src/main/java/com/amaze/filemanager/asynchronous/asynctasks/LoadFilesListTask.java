@@ -444,12 +444,7 @@ public class LoadFilesListTask
       do {
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
         if (path != null && path.endsWith(".apk")) {
-          HybridFileParcelable strings =
-              RootHelper.generateBaseFile(new File(path), showHiddenFiles);
-          if (strings != null) {
-            LayoutElementParcelable parcelable = createListParcelables(strings);
-            if (parcelable != null) apks.add(parcelable);
-          }
+          Log.d("ASIM","LoadFileListTask listApks()");
         }
       } while (cursor.moveToNext());
     }

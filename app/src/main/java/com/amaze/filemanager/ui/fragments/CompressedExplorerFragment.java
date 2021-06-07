@@ -60,6 +60,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -469,6 +470,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
   }
 
   private void updateBottomBar() {
+    Log.d("ASIM","KLMM CompressesExplorerFrag updateBottomBar folder:"+folder+" file"+file);
     String path =
         !isRootRelativePath()
             ? compressedFile.getName() + SEPARATOR + relativeDirectory

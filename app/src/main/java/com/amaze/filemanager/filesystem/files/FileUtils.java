@@ -213,6 +213,7 @@ public class FileUtils {
    * @param context
    */
   public static void scanFile(@NonNull Context context, @NonNull HybridFile[] hybridFiles) {
+    Log.d("ASIM","scanFile1");
     AsyncTask.execute(
         () -> {
           if (hybridFiles[0].exists(context) && hybridFiles[0].isLocal()) {
@@ -236,6 +237,8 @@ public class FileUtils {
    * @param context given context
    */
   private static void scanFile(@NonNull HybridFile hybridFile, Context context) {
+
+    Log.d("ASIM","scanFile2");
 
     if ((hybridFile.isLocal() || hybridFile.isOtgFile()) && hybridFile.exists(context)) {
 
@@ -265,6 +268,7 @@ public class FileUtils {
    * @param c {@link Context}
    */
   private static void scanFile(@NonNull Uri uri, @NonNull Context c) {
+    Log.d("ASIM","scanFile3");
     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
     c.sendBroadcast(mediaScanIntent);
   }
@@ -450,17 +454,20 @@ public class FileUtils {
   /** Method supports showing a UI to ask user to open a file without any extension/mime */
   public static void openWith(
       final File f, final PreferenceActivity activity, final boolean useNewStack) {
+    Log.d("ASIM","openWith1");
     openWith(
         FileProvider.getUriForFile(activity, activity.getPackageName(), f), activity, useNewStack);
   }
 
   public static void openWith(
       final DocumentFile f, final PreferenceActivity activity, final boolean useNewStack) {
+    Log.d("ASIM","openWith2");
     openWith(f.getUri(), activity, useNewStack);
   }
 
   public static void openWith(
       final Uri uri, final PreferenceActivity activity, final boolean useNewStack) {
+    Log.d("ASIM","openWith3");
     MaterialDialog.Builder a = new MaterialDialog.Builder(activity);
     a.title(activity.getString(R.string.open_as));
     String[] items =
@@ -574,6 +581,7 @@ public class FileUtils {
   }
 
   public static String[] getFolderNamesInPath(String path) {
+    Log.d("ASIM","getFolderNamesInPath");
     if (!path.endsWith("/")) path += "/";
     @Nullable Pair<String, String> splitUri = splitUri(path);
     if (splitUri != null) {
@@ -595,6 +603,7 @@ public class FileUtils {
    * @return string array of incremental path segments
    */
   public static String[] getPathsInPath(String path) {
+    Log.d("ASIM","getPathsInPath");
     if (path.endsWith("/")) {
       path = path.substring(0, path.length() - 1);
     }
@@ -646,6 +655,7 @@ public class FileUtils {
    *     </ul>
    */
   public static @Nullable Pair<String, String> splitUri(@NonNull final String path) {
+    Log.d("ASIM","splitUri");
     Uri uri = Uri.parse(path);
     if (uri.getScheme() != null) {
       String urlPrefix = uri.getScheme() + "://" + uri.getEncodedAuthority();
@@ -661,6 +671,7 @@ public class FileUtils {
   }
 
   public static void openFile(final File f, final MainActivity m, SharedPreferences sharedPrefs) {
+    Log.d("ASIM","openFile");
     boolean useNewStack =
         sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK, false);
     boolean defaultHandler = isSelfDefault(f, m);
@@ -707,12 +718,14 @@ public class FileUtils {
 
   private static void openFileDialogFragmentFor(
       @NonNull File file, @NonNull MainActivity mainActivity) {
+    Log.d("ASIM","openFileDialogFragmentFor1");
     openFileDialogFragmentFor(
         file, mainActivity, MimeTypes.getMimeType(file.getAbsolutePath(), false));
   }
 
   private static void openFileDialogFragmentFor(
       @NonNull File file, @NonNull MainActivity mainActivity, @NonNull String mimeType) {
+    Log.d("ASIM","openFileDialogFragmentFor2");
     OpenFileDialogFragment.Companion.openFileOrShow(
         FileProvider.getUriForFile(mainActivity, mainActivity.getPackageName(), file),
         mimeType,
@@ -723,16 +736,19 @@ public class FileUtils {
 
   private static void openFileDialogFragmentFor(
       @NonNull DocumentFile file, @NonNull MainActivity mainActivity) {
+    Log.d("ASIM","openFileDialogFragmentFor3");
     openFileDialogFragmentFor(
         file.getUri(), mainActivity, MimeTypes.getMimeType(file.getUri().toString(), false));
   }
 
   private static void openFileDialogFragmentFor(
       @NonNull Uri uri, @NonNull MainActivity mainActivity, @NonNull String mimeType) {
+    Log.d("ASIM","openFileDialogFragmentFor4");
     OpenFileDialogFragment.Companion.openFileOrShow(uri, mimeType, false, mainActivity, false);
   }
 
   private static boolean isSelfDefault(File f, Context c) {
+    Log.d("ASIM","isSelfDefault");
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.setDataAndType(Uri.fromFile(f), MimeTypes.getMimeType(f.getPath(), f.isDirectory()));
     ResolveInfo info =
@@ -747,6 +763,7 @@ public class FileUtils {
   /** Support file opening for {@link DocumentFile} (eg. OTG) */
   public static void openFile(
       final DocumentFile f, final MainActivity m, SharedPreferences sharedPrefs) {
+    Log.d("ASIM","isSelfDefault");
     boolean useNewStack =
         sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK, false);
     try {
@@ -893,6 +910,7 @@ public class FileUtils {
   }
 
   public static boolean isPathAccessible(String dir, SharedPreferences pref) {
+    Log.d("ASIM","isPathAccessible dir:"+dir);
     File f = new File(dir);
     boolean showIfHidden = pref.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false),
         isDirSelfOrParent = dir.endsWith("/.") || dir.endsWith("/.."),
@@ -924,6 +942,8 @@ public class FileUtils {
 
   /** Checks whether path for bookmark exists If path is not found, empty directory is created */
   public static void checkForPath(Context context, String path, boolean isRootExplorer) {
+    Log.d("ASIM","checkForPath path:"+path);
+
     // TODO: Add support for SMB and OTG in this function
     if (!new File(path).exists()) {
       Toast.makeText(context, context.getString(R.string.bookmark_lost), Toast.LENGTH_SHORT).show();
@@ -952,6 +972,7 @@ public class FileUtils {
   }
 
   public static File fromContentUri(@NonNull Uri uri) {
+    Log.d("ASIM","fromContentUri uri:"+uri);
     if (!CONTENT.name().equalsIgnoreCase(uri.getScheme())) {
       throw new IllegalArgumentException(
           "URI must start with content://. URI was [" + uri.toString() + "]");
