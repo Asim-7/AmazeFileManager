@@ -986,7 +986,7 @@ public class MainActivity extends PermissionsActivity
       try {
         executeWithMainFragment(
             mainFragment -> {
-              Log.d("ASIM","KLMM MainActivity onPrepareOptionsMenu mainFragment");
+              Log.d("ASIM","MainActivity onPrepareOptionsMenu mainFragment");
               if (mainFragment.getMainFragmentViewModel().isList()) {
                 s.setTitle(R.string.gridview);
               } else {
@@ -1002,6 +1002,8 @@ public class MainActivity extends PermissionsActivity
                       mainFragment.getMainFragmentViewModel().getFolderCount(),
                       mainFragment.getMainFragmentViewModel().getFileCount(),
                       mainFragment);
+              Log.d("ASIM","KLMM MainActivity onPrepareOptionsMenu getFolderCount"+mainFragment.getMainFragmentViewModel().getFolderCount()
+                      +" getFileCount"+mainFragment.getMainFragmentViewModel().getFileCount());
               return null;
             });
       } catch (Exception e) {

@@ -427,7 +427,7 @@ public class TabFragment extends Fragment implements ViewPager.OnPageChangeListe
   }
 
   public void updateBottomBar(MainFragment mainFragment) {
-    Log.d("ASIM","KLMM TabFragment updateBottomBar mainFragment:"+mainFragment);
+    Log.d("ASIM","TabFragment updateBottomBar mainFragment:"+mainFragment);
     if (mainFragment == null || mainFragment.getMainFragmentViewModel() == null) {
       Log.w(getClass().getSimpleName(), "Failed to update bottom bar: main fragment not available");
       return;
@@ -444,6 +444,8 @@ public class TabFragment extends Fragment implements ViewPager.OnPageChangeListe
             mainFragment.getMainFragmentViewModel().getFolderCount(),
             mainFragment.getMainFragmentViewModel().getFileCount(),
             mainFragment);
+    Log.d("ASIM","KLMM TabFragment updateBottomBar getFolderCount:"+mainFragment.getMainFragmentViewModel().getFolderCount()
+            +" getFileCount"+mainFragment.getMainFragmentViewModel().getFileCount());
   }
 
   public void initLeftRightAndTopDragListeners(boolean destroy, boolean shouldInvokeLeftAndRight) {

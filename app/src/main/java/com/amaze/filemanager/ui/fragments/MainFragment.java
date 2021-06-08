@@ -1014,7 +1014,7 @@ public class MainFragment extends Fragment
       }
     }
     // set file count that is displayed in BottomBar
-    //file_count = (file_count - removedFiles);
+    mainFragmentViewModel.setFileCount(mainFragmentViewModel.getFileCount() - removedFiles);
 
     if (bitmap != null) {
       mainFragmentViewModel.setListElements(bitmap);
