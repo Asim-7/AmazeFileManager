@@ -109,7 +109,8 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
             val directoryUri = it.data?.data ?: return@registerForActivityResult
             requireContext().contentResolver.takePersistableUriPermission(
                 directoryUri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
             changeFTPServerPath(directoryUri.toString())
             updatePathText()
@@ -119,22 +120,6 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        retainInstance = true
-        mainActivity.appbar.setTitle(R.string.ftp)
-        mainActivity.fab.hide()
-        mainActivity.appbar.bottomBar.setVisibility(View.GONE)
-        mainActivity.invalidateOptionsMenu()
-        val skin_color = mainActivity.currentColorPreference.primaryFirstTab
-        val skinTwoColor = mainActivity.currentColorPreference.primarySecondTab
-        mainActivity.updateViews(
-            ColorDrawable(
-                if (MainActivity.currentTab == 1) {
-                    skinTwoColor
-                } else {
-                    skin_color
-                }
-            )
-        )
     }
 
     override fun onDestroyView() {
@@ -148,28 +133,12 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFtpBinding.inflate(inflater)
-        val startDividerView = binding.dividerFtpStart
-        val statusDividerView = binding.dividerFtpStatus
         accentColor = mainActivity.accent
         mainActivity.findViewById<CoordinatorLayout>(R.id.main_parent)
             .nextFocusDownId = R.id.startStopButton
         updateSpans()
         updateStatus()
-        when (mainActivity.appTheme.simpleTheme) {
-            AppTheme.LIGHT -> {
-                startDividerView.setBackgroundColor(Utils.getColor(context, R.color.divider))
-                statusDividerView.setBackgroundColor(Utils.getColor(context, R.color.divider))
-            }
-            AppTheme.DARK, AppTheme.BLACK -> {
-                startDividerView.setBackgroundColor(
-                    Utils.getColor(context, R.color.divider_dark_card)
-                )
-                statusDividerView.setBackgroundColor(
-                    Utils.getColor(context, R.color.divider_dark_card)
-                )
-            }
-            else -> {}
-        }
+        updateViews(mainActivity, binding)
         ftpBtn.setOnClickListener {
             if (!isRunning()) {
                 if (isConnectedToWifi(requireContext()) ||
@@ -223,7 +192,7 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                             }
                         }
                     }
-                    .positiveText(getString(R.string.change).toUpperCase())
+                    .positiveText(getString(R.string.change).uppercase())
                     .negativeText(R.string.cancel)
                     .build()
                     .show()
@@ -265,7 +234,7 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                     }
                 val dialog = loginDialogBuilder.customView(loginDialogView.root, true)
                     .title(getString(R.string.ftp_login))
-                    .positiveText(getString(R.string.set).toUpperCase())
+                    .positiveText(getString(R.string.set).uppercase())
                     .negativeText(getString(R.string.cancel))
                     .build()
 
@@ -322,10 +291,14 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                     }
                 }
                 timeoutBuilder
-                    .positiveText(resources.getString(R.string.set).toUpperCase())
+                    .positiveText(resources.getString(R.string.set).uppercase())
                     .negativeText(resources.getString(R.string.cancel))
                     .build()
                     .show()
+                return true
+            }
+            R.id.exit -> {
+                requireActivity().finish()
                 return true
             }
         }
@@ -349,7 +322,7 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                 stopServer()
                 statusText.text = spannedStatusNoConnection
                 ftpBtn.isEnabled = false
-                ftpBtn.text = resources.getString(R.string.start_ftp).toUpperCase()
+                ftpBtn.text = resources.getString(R.string.start_ftp).uppercase()
                 promptUserToEnableWireless()
             }
         }
@@ -370,7 +343,7 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                 else spannedStatusConnected
 
                 url.text = spannedStatusUrl
-                ftpBtn.text = resources.getString(R.string.stop_ftp).toUpperCase()
+                ftpBtn.text = resources.getString(R.string.stop_ftp).uppercase()
                 FtpNotification.updateNotification(
                     context,
                     FtpReceiverActions.STARTED_FROM_TILE == signal
@@ -379,15 +352,16 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
             FtpReceiverActions.FAILED_TO_START -> {
                 statusText.text = spannedStatusNotRunning
                 Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_LONG).show()
-                ftpBtn.text = resources.getString(R.string.start_ftp).toUpperCase()
+                ftpBtn.text = resources.getString(R.string.start_ftp).uppercase()
                 url.text = "URL: "
             }
             FtpReceiverActions.STOPPED -> {
                 statusText.text = spannedStatusNotRunning
                 url.text = "URL: "
-                ftpBtn.text = resources.getString(R.string.start_ftp).toUpperCase()
+                ftpBtn.text = resources.getString(R.string.start_ftp).uppercase()
             }
         }
+        updateStatus()
     }
 
     /** Sends a broadcast to start ftp server  */
@@ -412,6 +386,7 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
         wifiFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         requireContext().registerReceiver(mWifiReceiver, wifiFilter)
         EventBus.getDefault().register(this)
+        updateStatus()
     }
 
     override fun onPause() {
@@ -435,13 +410,13 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                 ftpBtn.isEnabled = true
             }
             url.text = "URL: "
-            ftpBtn.text = resources.getString(R.string.start_ftp).toUpperCase()
+            ftpBtn.text = resources.getString(R.string.start_ftp).uppercase()
         } else {
             accentColor = mainActivity.accent
             url.text = spannedStatusUrl
             statusText.text = spannedStatusConnected
             ftpBtn.isEnabled = true
-            ftpBtn.text = resources.getString(R.string.stop_ftp).toUpperCase()
+            ftpBtn.text = resources.getString(R.string.stop_ftp).uppercase()
         }
         val passwordDecrypted = passwordFromPreferences
         val passwordBulleted: CharSequence = OneCharacterCharSequence(
@@ -550,6 +525,38 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
         }
     }
 
+    private fun updateViews(mainActivity: MainActivity, binding: FragmentFtpBinding) {
+        mainActivity.appbar.setTitle(R.string.ftp)
+        mainActivity.fab.hide()
+        mainActivity.appbar.bottomBar.setVisibility(View.GONE)
+        mainActivity.invalidateOptionsMenu()
+
+        val startDividerView = binding.dividerFtpStart
+        val statusDividerView = binding.dividerFtpStatus
+
+        when (mainActivity.appTheme.simpleTheme) {
+            AppTheme.LIGHT -> {
+                startDividerView.setBackgroundColor(Utils.getColor(context, R.color.divider))
+                statusDividerView.setBackgroundColor(Utils.getColor(context, R.color.divider))
+            }
+            AppTheme.DARK, AppTheme.BLACK -> {
+                startDividerView.setBackgroundColor(
+                    Utils.getColor(context, R.color.divider_dark_card)
+                )
+                statusDividerView.setBackgroundColor(
+                    Utils.getColor(context, R.color.divider_dark_card)
+                )
+            }
+            else -> {
+            }
+        }
+        val skin_color = mainActivity.currentColorPreference.primaryFirstTab
+        val skinTwoColor = mainActivity.currentColorPreference.primarySecondTab
+        mainActivity.updateViews(
+            ColorDrawable(if (MainActivity.currentTab == 1) skinTwoColor else skin_color)
+        )
+    }
+
     // return address the FTP server is running
     private val ftpAddressString: String?
         get() {
@@ -654,7 +661,8 @@ class FtpServerFragment : Fragment(R.layout.fragment_ftp) {
                 .prefs
                 .edit()
                 .putString(
-                    FtpService.KEY_PREFERENCE_PASSWORD, CryptUtil.encryptPassword(context, password)
+                    FtpService.KEY_PREFERENCE_PASSWORD,
+                    CryptUtil.encryptPassword(context, password)
                 )
                 .apply()
         } catch (e: GeneralSecurityException) {
