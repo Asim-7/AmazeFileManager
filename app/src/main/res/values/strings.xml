@@ -442,6 +442,7 @@
     <string name="smb_launch_error">You will need to copy this file to storage to open it</string>
     <string name="error_file_not_found">Error: File Not Found</string>
     <string name="error_io">I/O Error</string>
+    <string name="error_file_too_large">Error: File Too Large</string>
     <string name="medium_text">Medium Text</string>
     <string name="permission_read">Read</string>
     <string name="permission_write">Write</string>
@@ -707,5 +708,9 @@
     <string name="disable">Disable</string>
     <string name="choose_operation">Choose operation to perform</string>
     <string name="remember">Remember for next time</string>
+    <string name="ftp_prompt_accept_first_start_saf_access_title">Grant SAF access for FTP server</string>
+    <string name="ftp_prompt_accept_first_start_saf_access">Since this is your first run of the FTP server, and you are using the device\'s internal storage as shared folder, please allow Amaze to access the storage using SAF.\n\n
+
+You only need to do this once, until the next time you select a new location for sharing.</string>
 </resources>
 
