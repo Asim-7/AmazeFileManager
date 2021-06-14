@@ -50,8 +50,11 @@
             android:id="@+id/lin"
             layout="@layout/layout_appbar"
             android:focusable="true"
+            android:visibility="gone"
             />
-        <include layout="@layout/layout_search"/>
+        <include
+            layout="@layout/layout_search"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_gravity="bottom|center_horizontal"

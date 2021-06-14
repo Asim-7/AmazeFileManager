@@ -40,7 +40,7 @@
 
     <!-- primary color palatte -->
     <color name="primary_red">#F44336</color>
-    <color name="primary_pink">#e91e63</color>
+    <color name="primary_pink">#26ACFF</color>
     <color name="primary_purple">#9c27b0</color>
     <color name="primary_deep_purple">#673ab7</color>
     <color name="primary_indigo">#3f51b5</color>
@@ -60,7 +60,7 @@
 
     <!-- accent color palatte -->
     <color name="accent_red">#F44336</color>
-    <color name="accent_pink">#e91e63</color>
+    <color name="accent_pink">#26ACFF</color>
     <color name="accent_purple">#9c27b0</color>
     <color name="accent_deep_purple">#673ab7</color>
     <color name="accent_indigo">#3f51b5</color>

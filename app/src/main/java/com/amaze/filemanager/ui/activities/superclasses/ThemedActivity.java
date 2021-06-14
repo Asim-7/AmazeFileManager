@@ -157,7 +157,7 @@ public class ThemedActivity extends PreferenceActivity {
           else setTheme(R.style.pref_accent_dark_red);
           break;
 
-        case "#E91E63":
+        case "#26ACFF":
           if (theme.equals(AppTheme.LIGHT)) setTheme(R.style.pref_accent_light_pink);
           else if (theme.equals(AppTheme.BLACK)) setTheme(R.style.pref_accent_black_pink);
           else setTheme(R.style.pref_accent_dark_pink);
