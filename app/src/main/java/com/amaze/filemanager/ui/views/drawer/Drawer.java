@@ -512,30 +512,6 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         menu,
         LASTGROUP,
         order++,
-        R.string.apps,
-        new MenuMetadata(
-            () -> {
-              FragmentTransaction transaction2 =
-                  mainActivity.getSupportFragmentManager().beginTransaction();
-              transaction2.replace(R.id.content_frame, new AppsListFragment());
-              mainActivity
-                  .getAppbar()
-                  .getAppbarLayout()
-                  .animate()
-                  .translationY(0)
-                  .setInterpolator(new DecelerateInterpolator(2))
-                  .start();
-              pending_fragmentTransaction = transaction2;
-              if (!isDrawerLocked) close();
-              else onDrawerClosed();
-            }),
-        R.drawable.ic_android_white_24dp,
-        null);
-
-    addNewItem(
-        menu,
-        LASTGROUP,
-        order++,
         R.string.setting,
         new MenuMetadata(
             () -> {
