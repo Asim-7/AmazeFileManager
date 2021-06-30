@@ -175,6 +175,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.arch.core.util.Function;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.app.LoaderManager;
@@ -393,6 +394,17 @@ public class MainActivity extends PermissionsActivity
               }
             });
     initStatusBarResources(findViewById(R.id.drawer_layout));
+
+    ConstraintLayout backgroundMain = findViewById(R.id.background_main_page);
+
+    backgroundMain.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) finishAffinity();
+        else finish();
+      }
+    });
+
   }
 
   private void invalidateFragmentAndBundle(Bundle savedInstanceState) {
